@@ -2,37 +2,96 @@ import random
 
 class Grammar:
     def __init__(self):
-        self.variables = {'S', 'D', 'E', 'J'}
-        self.terminals = {'a', 'b', 'c', 'd', 'e'}
-        self.productions = {
+        self.VN = {'S', 'D', 'E', 'J'}
+        self.VT = {'a', 'b', 'c', 'd', 'e'}
+        self.P = {
             'S': ['aD'],
             'D': ['dE', 'bJ', 'aE'],
             'J': ['cS'],
             'E': ['e', 'aE']
         }
 
-    def generate_string(self, variable, depth=0):
-        if depth > 10:  # To avoid infinite recursion
-            return ""
+    def generate_string(self, symbol=None, length=0, max_length=15):
+        if symbol is None:
+            symbol = 'S'
 
-        if variable not in self.variables:
-            return variable
+        if length > max_length:
+            return ''
 
-        production = random.choice(self.productions[variable])
-        string = ""
-        for symbol in production:
-            string += self.generate_string(symbol, depth+1)
-        return string
+        if symbol in self.VT:
+            return symbol
 
-    def generate_valid_strings(self, num_strings):
-        valid_strings = []
-        for _ in range(num_strings):
-            valid_strings.append(self.generate_string('S'))
-        return valid_strings
+        production = random.choice(self.P.get(symbol, []))
+        generated_string = ''
+        for s in production:
+            generated_string += self.generate_string(s, length + 1, max_length)
+        return generated_string
 
-if __name__ == "__main__":
-    grammar = Grammar()
-    generated_strings = grammar.generate_valid_strings(5)
-    print("Generated Strings:")
-    for string in generated_strings:
-        print(string)
+    def convert_to_fa(self):
+        transitions = {}
+        final_state = 'DEAD'
+
+        for non_terminal in self.VN:
+            transitions[non_terminal] = {}
+
+        for non_terminal, productions in self.P.items():
+            for production in productions:
+                # If the length of the current production is 1 and it's a terminal, add a transition to the final state
+                if len(production) == 1 and production[0] in self.VT:
+                    transitions[non_terminal][production] = final_state
+                else:
+                    # Otherwise, add a transition to the new state defined by the production
+                    transition, new_state = production[0], production[1]
+                    transitions[non_terminal][transition] = new_state
+
+        return FiniteAutomaton(
+            states=self.VN.union({final_state}),
+            alphabet=self.VT,
+            transitions=transitions,
+            initial_state='S',
+            accept_states={final_state}
+        )
+
+class FiniteAutomaton:
+    def __init__(self, states, alphabet, transitions, initial_state, accept_states):
+        self.states = states
+        self.alphabet = alphabet
+        self.transitions = transitions
+        self.initial_state = initial_state
+        self.accept_states = accept_states
+
+    def accepts(self, input_string):
+        current_state = self.initial_state
+
+        for symbol in input_string:
+            # Check if the current state has a transition defined for the current symbol
+            if current_state in self.transitions and symbol in self.transitions[current_state]:
+                current_state = self.transitions[current_state][symbol]
+            else:
+                # If there's no transition defined, the string cannot be obtained by state transitions
+                return False
+            if symbol not in self.alphabet:
+                # If the symbol is not part of the alphabet, the string cannot be obtained by state transitions
+                return False
+
+        # Check if the final state after processing all symbols is one of the accept states
+        return current_state in self.accept_states
+
+# Testing the functionalities
+grammar = Grammar()
+automaton = grammar.convert_to_fa()
+
+print("Generated strings:")
+for _ in range(5):
+    gen_string = grammar.generate_string(max_length=15)
+    if automaton.accepts(gen_string):
+        print(f"{gen_string} (accepted)")
+    else:
+        print(f"{gen_string} (rejected)")
+
+    tested_strings = ['aca', 'aede', 'caeda']
+    for string in tested_strings:
+        if automaton.accepts(string):
+            print(f"{string} (accepted)")
+        else:
+            print(f"{string} (rejected)")
