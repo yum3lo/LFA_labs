@@ -88,10 +88,11 @@ for _ in range(5):
         print(f"{gen_string} (accepted)")
     else:
         print(f"{gen_string} (rejected)")
-
-    tested_strings = ['aca', 'aede', 'caeda']
-    for string in tested_strings:
-        if automaton.accepts(string):
-            print(f"{string} (accepted)")
-        else:
-            print(f"{string} (rejected)")
+ 
+print("\nTested strings:")
+tested_strings = ['aca', 'aede', 'caeda']
+for string in tested_strings:
+    if automaton.accepts(string):
+        print(f"{string} (accepted)")
+    else:
+        print(f"{string} (rejected)")
