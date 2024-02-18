@@ -12,15 +12,18 @@ class Grammar:
         }
 
     def generate_string(self, symbol=None, length=0, max_length=15):
+        # If no symbol is provided, start from the initial state
         if symbol is None:
             symbol = 'S'
 
         if length > max_length:
             return ''
 
+        # If the current symbol is a terminal, it returns it
         if symbol in self.VT:
             return symbol
 
+        # Otherwise, it generates a string for each production of the current symbol
         production = random.choice(self.P.get(symbol, []))
         generated_string = ''
         for s in production:
@@ -28,12 +31,15 @@ class Grammar:
         return generated_string
 
     def convert_to_fa(self):
+        # Initializes the transitions dictionary and the final state
         transitions = {}
         final_state = 'DEAD'
 
+        # Initializes transitions for each non-terminal
         for non_terminal in self.VN:
             transitions[non_terminal] = {}
 
+        # Adds transitions for each production
         for non_terminal, productions in self.P.items():
             for production in productions:
                 # If the length of the current production is 1 and it's a terminal, add a transition to the final state
