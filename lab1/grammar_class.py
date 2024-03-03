@@ -1,6 +1,5 @@
 import random
 from finite_automaton_class import FiniteAutomaton
-
 class Grammar:
     def __init__(self):
         self.VN = {'S', 'D', 'E', 'J'}
