@@ -21,6 +21,14 @@ class FiniteAutomaton:
                     seen_symbols.add(symbol)
         return True
 
+    def get_next_states(self, current_state, symbol):
+        # Get the next states based on the current state and input symbol.
+        # Check if the current state and symbol combination has transitions defined
+        if current_state in self.transitions and symbol in self.transitions[current_state]:
+            return self.transitions[current_state][symbol]
+        else:
+            return set()  # Return an empty set if no transitions are defined for the current state and symbol
+
     def accepts(self, input_string):
         current_state = self.initial_state
 
