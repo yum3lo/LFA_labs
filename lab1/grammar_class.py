@@ -31,15 +31,13 @@ class Grammar:
         return generated_string
     
     def classify_grammar(self):
-        # Determine if the grammar is regular, context-free, context-sensitive, or unrestricted
-
-        # Check if all production rules are of the form A -> a or A -> aB where 'a' is a terminal and 'B' is a non-terminal
+        # If all production rules are of the form A -> a or A -> aB where 'a' is a terminal and 'B' is a non-terminal
         is_regular = all(len(self.P[non_terminal]) == 1 and (len(self.P[non_terminal][0]) == 1 or (len(self.P[non_terminal][0]) == 2 and self.P[non_terminal][0][1] in self.VN)) for non_terminal in self.P)
 
-        # Check if it's not regular but each production rule has only one non-terminal on the left-hand side
+        # If it's not regular but each production rule has only one non-terminal on the left-hand side
         is_context_free = not is_regular and all(len(production) == 1 or (len(production) == 2 and production[1] in self.VN) for production in self.P)
 
-        # Check if it's not context-free but each production rule can rewrite any string of terminals and non-terminals
+        # If it's not context-free but each production rule can rewrite any string of terminals and non-terminals
         is_context_sensitive = not is_context_free and all(len(production) <= len(replacement) for production, replacement in self.P.items())
 
         # If none of the above conditions are met, it's an unrestricted grammar

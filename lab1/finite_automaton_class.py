@@ -1,5 +1,3 @@
-import matplotlib.pyplot as plt
-import networkx as nx
 class FiniteAutomaton:
     def __init__(self, states, alphabet, transitions, initial_state, accept_states):
         self.states = states
@@ -7,7 +5,6 @@ class FiniteAutomaton:
         self.transitions = transitions
         self.initial_state = initial_state
         self.accept_states = accept_states
-        self.is_deterministic = self.is_deterministic
 
     def is_deterministic(self):
         # Iterate over each state in the finite automaton
@@ -19,7 +16,7 @@ class FiniteAutomaton:
             for symbol in self.alphabet:
                 if symbol in transitions_from_state:
                     # If the symbol was seen before, the finite automaton is nondeterministic
-                    if symbol in seen_symbols:
+                    if symbol in seen_symbols or len(transitions_from_state[symbol]) > 1:
                         return False
                     seen_symbols.add(symbol)
         return True
@@ -32,29 +29,32 @@ class FiniteAutomaton:
             if current_state in self.transitions and symbol in self.transitions[current_state]:
                 current_state = self.transitions[current_state][symbol]
             else:
-                # If there's no transition defined, the string cannot be obtained by state transitions
+                # If no transition defined, the string cannot be obtained by state transitions
                 return False
             if symbol not in self.alphabet:
-                # If the symbol is not part of the alphabet, the string cannot be obtained by state transitions
+                # If the symbol is not in the alphabet, the string cannot be obtained by state transitions
                 return False
 
         # Check if the final state after processing all symbols is one of the accept states
         return current_state in self.accept_states
     
-# Create a directed graph
-G = nx.DiGraph()
-nodes = ['q0', 'q1', 'q2', 'q3', 'q4']
-G.add_nodes_from(nodes)
-edges = [('q0', 'q1', 'a'), ('q1', 'q2', 'b'), ('q2', 'q0', 'b'),
-         ('q3', 'q4', 'a'), ('q4', 'q0', 'a'), ('q2', 'q3', 'a'), ('q1', 'q1', 'b')]
-G.add_edges_from(edges)
+# Define the finite automaton
+Q = {'q0', 'q1', 'q2', 'q3', 'q4'}
+Sigma = {'a', 'b'}
+F = {'q3'}
+delta = {
+    'q0': {'a': 'q1'},
+    'q1': {'b': 'q2'},
+    'q2': {'b': 'q0', 'a': 'q3'},
+    'q3': {'a': 'q4'},
+    'q4': {'a': 'q0'},
+}
 
-# Draw the graph
-pos = nx.spring_layout(G)  # Position nodes using the spring layout algorithm
-nx.draw(G, pos, with_labels=True, node_size=1500, node_color='lightblue', font_size=12, arrowsize=20)
-edge_labels = {edge[:2]: edge[2] for edge in edges}  # Create a dictionary of edge labels
-nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)  # Draw edge labels
+# Create an instance of the FiniteAutomaton class
+finite_automaton = FiniteAutomaton(Q, Sigma, delta, 'q0', F)
 
-# Show the graph
-plt.title('Finite Automaton')
-plt.show()
+# Check if the finite automaton is deterministic
+if finite_automaton.is_deterministic():
+    print("The finite automaton is deterministic.")
+else:
+    print("The finite automaton is nondeterministic.")
