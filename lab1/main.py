@@ -1,5 +1,4 @@
 from grammar_class import Grammar
-from finite_automaton_class import FiniteAutomaton
 
 # Testing the functionalities
 grammar = Grammar()
