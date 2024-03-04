@@ -7,7 +7,6 @@ class FiniteAutomaton:
         self.accept_states = accept_states
 
     def is_deterministic(self):
-        # Iterate over each state in the finite automaton
         for state in self.states:
             transitions_from_state = self.transitions.get(state, {})
             seen_symbols = set()
@@ -22,12 +21,12 @@ class FiniteAutomaton:
         return True
 
     def get_next_states(self, current_state, symbol):
-        # Get the next states based on the current state and input symbol.
+        # Get the next states based on the current state and input symbol
         # Check if the current state and symbol combination has transitions defined
         if current_state in self.transitions and symbol in self.transitions[current_state]:
             return self.transitions[current_state][symbol]
         else:
-            return set()  # Return an empty set if no transitions are defined for the current state and symbol
+            return set()
 
     def accepts(self, input_string):
         current_state = self.initial_state

@@ -16,11 +16,10 @@ delta = {
 
 finite_automaton = FiniteAutomaton(Q, Sigma, delta, 'q0', F)
 
-# Create an instance of RegularGrammar and convert from finite automaton
+# Instance of RegularGrammar and convert from finite automaton
 regular_grammar = RegularGrammar()
 regular_grammar.convert_from_fa(finite_automaton)
 
-# Output the regular grammar
 print("Regular Grammar:")
 print("Non-terminals:", regular_grammar.VN)
 print("Terminals:", regular_grammar.VT)
