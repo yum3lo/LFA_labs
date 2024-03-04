@@ -4,7 +4,7 @@ class RegularGrammar:
         self.VT = set()
         self.P = {}
 
-    def convert_from_finite_automaton(self, finite_automaton):
+    def convert_from_fa(self, finite_automaton):
         # Add non-terminals for each state in the finite automaton
         self.VN.update(finite_automaton.states)
 
