@@ -17,7 +17,8 @@ def lexer(contents):
         print(tokens)
     
 
-def parse(file):
-    contents = open(file, "r").read()
+def parse(filename):
+    with open(filename, "r") as f:
+        contents = f.read()
     tokens = lexer(contents)
     return tokens
