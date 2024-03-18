@@ -1,5 +1,3 @@
-import regex as re
-
 def lexer(contents):
     # Split the contents of the file into a list of tokens
     # This way, when an error comes up, it's easier to tell where it is
@@ -75,11 +73,11 @@ def parse(filename):
                 if len(line) > 1 and line[line.index(token) + 1][0] == "String":
                     Vars[token[1]] = line[line.index(token) + 1][1]
             else:
-                # Error: Unexpected token
+                # Error
                 break
         # If there are no errors, print the instruction line
         else:
             print(instr_line)
     
-    print(Vars)
-    return lines
+    for line in lines:
+        print(line)
