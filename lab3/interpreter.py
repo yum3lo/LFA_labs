@@ -1,6 +1,5 @@
 def lexer(contents):
     # Split the contents of the file into a list of tokens
-    # This way, when an error comes up, it's easier to tell where it is
     lines = contents.split("\n")
     lexemes_list = []
 
