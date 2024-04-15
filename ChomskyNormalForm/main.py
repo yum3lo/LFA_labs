@@ -39,9 +39,7 @@ class Grammar:
         self.rules = new_rules
 
     def _expand_nullable_prod(self, production, nullable):
-        """
-        Expand a production by replacing nullable non-terminals with epsilon.
-        """
+        # Expand a production by replacing nullable non-terminals with epsilon.
         expansions = ['']
 
         for symbol in production:
@@ -58,10 +56,6 @@ class Grammar:
         return [expansion for expansion in expansions if expansion]
 
     def eliminate_renaming(self):
-        """
-        Eliminate renaming productions (unit productions) from the grammar.
-        """
-
         # Track the changes to avoid re-processing unit productions
         changes = True
         while changes:
@@ -86,11 +80,8 @@ class Grammar:
                     p for p in self.rules[non_terminal] if p not in self.non_terminals]
 
     def eliminate_inaccessible_symbols(self):
-        """
-        Eliminate inaccessible symbols from the grammar.
-        """
         accessible = {self.start}
-        changes = True  # Flag to check if there were changes in the last iteration
+        changes = True  # To check if there were changes in the last iteration
         old_rules = self.rules.copy()
 
         while changes:
@@ -106,9 +97,6 @@ class Grammar:
         self.rules = {nt: old_rules[nt] for nt in accessible}
 
     def eliminate_non_productive_symbols(self):
-        """
-        Eliminate non-productive symbols from the grammar.
-        """
         productive = {self.start}
         changes = True
 
@@ -124,7 +112,7 @@ class Grammar:
 
         self.non_terminals = list(productive)
 
-        # Create a new dictionary to store the updated rules
+        # To store the updated rules
         updated_rules = {}
         for nt in productive:
             productive_rules = []
@@ -161,9 +149,6 @@ class Grammar:
         raise ValueError("Exhausted all possible non-terminal symbols.")
 
     def to_cnf(self, print_steps=True):
-        """
-        Convert the grammar to Chomsky Normal Form (CNF).
-        """
         self.eliminate_epsilon_productions()
         self.eliminate_renaming()
         self.eliminate_inaccessible_symbols()
