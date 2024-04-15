@@ -125,7 +125,6 @@ class Grammar:
                     productive_rules.append(production)
 
             updated_rules[nt] = productive_rules
-
         self.rules = updated_rules
 
     def _create_new_non_terminal(self):
@@ -154,10 +153,8 @@ class Grammar:
         self.eliminate_inaccessible_symbols()
         self.eliminate_non_productive_symbols()
         
-        # Additional steps to convert to CNF
         rhs_to_non_terminal = {}
         old_non_terminals = list(self.rules)
-
         new_rules = {}
         for non_terminal in list(self.rules):
             new_rules[non_terminal] = set()
@@ -208,9 +205,7 @@ VN = {'S', 'A', 'B', 'C'}
 VT = {'a', 'd'}
 P = {'S': ['dB', 'A'], 'A': ['d', 'dS', 'aAdAB'], 'B': ['a', 'aS', 'A', ''], 'C': ['Aa']}
 S = 'S'
-
 grammar = Grammar(VN, VT, P, S)
 cnf_rules = grammar.to_cnf(print_steps=False)
-
 print("Chomsky Normal Form (CNF):")
 print(cnf_rules)
