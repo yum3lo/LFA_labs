@@ -42,26 +42,3 @@ def construct_ast(parsed_commands):
             root = symbol_node
 
     return root
-
-def plot_ast(root):
-    def set_positions(node, x, y):
-        node.x = x
-        node.y = y
-        if node.children:
-            dx = 0.3 / len(node.children)
-            for i, child in enumerate(node.children):
-                set_positions(child, x + i * dx, y - 0.2)
-
-    set_positions(root, 0.75, 0.8)
-
-    def plot_node(node):
-        plt.text(node.x, node.y, str(node), ha='center', va='center', bbox=dict(facecolor='white', edgecolor='black'))
-        if node.children:
-            for child in node.children:
-                plt.plot([node.x, child.x], [node.y, child.y], 'k-')
-                plot_node(child)
-
-    plt.figure(figsize=(8, 6))
-    plot_node(root)
-    plt.axis('off')  # Turn off axis display
-    plt.show()

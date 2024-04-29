@@ -1,0 +1,8 @@
+digraph {
+	node [fontname=Helvetica shape=box style=rounded]
+	2634505910928 [label=<SymbolNode: detect>]
+	2634661904096 [label=<VariableNode: imagePath>]
+	2634505910928 -> 2634661904096
+	2634661904288 [label=<StringNode: "path/to/image1.png">]
+	2634505910928 -> 2634661904288
+}

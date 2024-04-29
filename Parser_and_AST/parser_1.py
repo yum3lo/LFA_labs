@@ -49,18 +49,23 @@ if __name__ == "__main__":
     # Get the parsed instructions
     instructions = parser.get_instructions()
     for instruction in instructions:
-        print(instruction)
+        print("Parsed command:", instruction)
 
         # Convert the parsed instruction tuple into a simple AST
         symbol_node = SymbolNode(instruction[0])
+        variable_node = None
         for arg_type, arg_value in instruction[1]:
             if arg_type == "Variable":
                 variable_node = VariableNode(arg_value)
                 symbol_node.add_child(variable_node)
-            elif arg_type == "String":
+            elif arg_type == "String" and variable_node:
                 string_node = StringNode(arg_value)
-                symbol_node.add_child(string_node)
+                variable_node.add_child(string_node)
 
-        # Plot the AST
-        print("Parsed command:", instruction)
-        plot_ast(symbol_node)
+        # Print the AST
+        print("AST:")
+        print(symbol_node)
+        for child in symbol_node.children:
+            print(f"└── {child}")
+            for sub_child in child.children:
+                print(f"    └── {sub_child}")
